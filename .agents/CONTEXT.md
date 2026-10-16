@@ -1,6 +1,7 @@
 # Active Project Context
 
-Last updated: 2026-09-25
+Last updated: 2026-10-17
+Word limit: 1,200 visible words (including this line)
 
 ## Project Summary
 
@@ -34,7 +35,8 @@ Last updated: 2026-09-25
 - Version-control policy (feature branches from `development`, PR-only merges, no squash-merge, `main` only via PR from `development`) and version naming (`X.Y.Z` with epoch-minute `Z`) are documented once in `AGENTS.md`; do not duplicate them here.
 - (2026-09-20, user decision) This repo is both a package library and a clonable template: reusable SOAP/utility packages stay under `Packages/` as before; the GameFlow application layer lives in `Assets/` as template/integration glue, not as a package. The formerly-hollow `Packages/com.madratzz.scriptableobject.architecture/` (package.json with no code, after the code moved to `Assets/`) was deleted rather than kept as a misleading stub.
 - (2026-09-20) `com.madratzz.utilities.attributes` gained `[RequireReference]` + `RequiredReferenceValidator` — a project-wide convention for marking `[SerializeField]` references as required and catching unassigned ones across every scene/prefab (**Tools → Validate Required References**, or `-executeMethod ...ValidateProjectCI` for CI). Applied so far to `GameEventListener`/`GameEventRaiser`/`GameEventRaiserOnEnable`'s `GameEvent` field and `ApplicationBase`/`ApplicationFlowController`'s FSM-chain fields. New required-but-unguarded `[SerializeField]` fields elsewhere should adopt it rather than reinventing null-checking.
-- (2026-09-21) `com.madratzz.utilities.attributes` also gained a searchable-dropdown Inspector for **every** `ScriptableObject`-typed `[SerializeField]` field, project-wide — `SearchableAssetDrawer` is registered against `ScriptableObject` itself (`[CustomPropertyDrawer(typeof(ScriptableObject), true)]`), not a marker attribute, deliberately so it's automatic and never needs adding per field/class. Built as the free (no Odin Inspector) alternative evaluated in the prior GameEvent-improvement discussion. First implementation used a `[SearchableAsset]` attribute per field; user asked "can't we make it class level... auto"; replaced with the type-based global registration on the same turn before anything was committed.
+- (2026-09-21) `com.madratzz.utilities.attributes` draws every `ScriptableObject`-typed `[SerializeField]` as a searchable dropdown: `SearchableAssetDrawer` is registered against `ScriptableObject` itself (type-based, automatic, no per-field attribute). Free alternative to Odin. History: [archived decision](../.archive/context/CONTEXT-2026-09-21-SEARCHABLE-ASSET-DROPDOWN-DECISION.md).
+- (2026-10-17, user decision) Adopted the personal Unity rules library except its DI/layered-architecture files: condensed in `AGENTS.md` "Unity Rules", full text in `.agents/rules/`. Skills, test-delegation and model-selection rules were made harness-agnostic in the source repo.
 
 ## Active Constraints
 
@@ -48,15 +50,16 @@ Last updated: 2026-09-25
 - What Verdaccio publishing conventions should the 4 packages still without EditMode tests (`platform.device`, `utilities.coroutines`, `utilities.ui`, `utilities.unity.alwaysstartfromscenezero`) adopt before first publish? (12 of 16 packages already have a `Tests/` folder, up from 11 — `utilities.attributes` gained tests alongside `RequiredReferenceValidator`.)
 - What Verdaccio package naming, versioning, publishing, and access conventions should this repository adopt?
 - The 2026-09-20 editor bump to `6000.3.24f1` added `com.unity.sdk.linux-x86_64` and `com.unity.toolchain.linux-x86_64-linux` to `Packages/manifest.json` as project-wide dependencies. Assumption: these were pulled in by Unity Hub/Editor package resolution during the version bump rather than a deliberate Linux-build-target decision — not confirmed. Open question: should these be scoped/conditional rather than a default dependency for every contributor?
+- Is `Docs/Levels/` (adapted from the rules library's `docs/03 Design/Levels/`) the right home for level docs once a game needs them? Unconfirmed assumption.
 - Should `Assets/GameEvents/` (currently empty) hold hand-authored `GameEvent` assets checked into the repo, or should the template ship with none and expect consumers to create their own?
-
 - Should the 12 packages that ship EditMode tests declare `com.unity.test-framework` in their `package.json`? None currently does, though their test asmdefs reference `UnityEngine.TestRunner`/`UnityEditor.TestRunner` and Unity's own packages (e.g. `com.unity.addressables`) declare it. Consistent across the family, so it reads as convention rather than oversight — but it should be a deliberate decision before the first Verdaccio publish. (Raised 2026-09-25.)
 - Should the 6 genuinely dead asmdef references be swept — `eventsystem.extensions.runtime`/`.tests` → `eventsystem.core`, and `time.machine.tests`/`.playmodetests` → `utilities.core` and `utilities.coroutines`? Harmless at compile time. A related question: should `eventsystem.extensions` keep its `eventsystem.core` `package.json` dependency, the one remaining genuine over-declaration? (Raised 2026-09-25. An earlier count of "11 dead references over-declaring the graph" was wrong — 4 of those are load-bearing via inheritance; see LEARNINGS.)
 
 ## Archive Summary
 
-No archived project-context snapshots exist yet. This active file records the initial repository baseline and setup decisions.
+Older detail: the original first-cut design of the searchable dropdown (per-field `[SearchableAsset]` attribute, replaced the same day by the type-based drawer) is archived.
 
 ## Archive Pointers
 
+- [CONTEXT-2026-09-21-SEARCHABLE-ASSET-DROPDOWN-DECISION.md](../.archive/context/CONTEXT-2026-09-21-SEARCHABLE-ASSET-DROPDOWN-DECISION.md)
 - [Archived Context Index](../.archive/context/INDEX.md)

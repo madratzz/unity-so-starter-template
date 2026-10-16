@@ -1,6 +1,6 @@
 # Default Agent
 
-Last updated: 2026-09-16
+Last updated: 2026-10-17
 
 ## Agent Role
 
@@ -17,6 +17,8 @@ This agent is responsible for maintaining project context, memory, logs, learnin
 - Archive older files when the date changes or active files become too large.
 - Never delete historical context without archiving it first.
 - Keep summaries concise but useful.
+- Enforce the active word budgets after every update: `CONTEXT.md` at most 1,200 words, `MEMORY.md` at most 2,000, `LEARNINGS.md` at most 1,500 (counting method in root `AGENTS.md`). Retain each file's protected essentials.
+- Keep re-reading shared context files immediately before editing them and merge, never replace.
 - Use relative links.
 - Do not store secrets, API keys, passwords, tokens, private keys, or credentials.
 - Follow the version-control, branch, pull-request, version-naming, and documentation policies in the root `AGENTS.md`.
@@ -49,6 +51,6 @@ See [`.agents/CONTEXT.md`](../CONTEXT.md) for the current, holistic project summ
 ## Archive Thresholds
 
 - Archive meaningful prior-day log detail when a new day starts.
-- Archive older sections after summarizing them when `LOGS.md` exceeds 300–500 lines, `LEARNINGS.md` or `MEMORY.md` exceeds 200–300 lines, or `CONTEXT.md` exceeds 150–250 lines.
+- Archive older sections after summarizing them when `LOGS.md` exceeds 300–500 lines, or when `CONTEXT.md`, `MEMORY.md`, or `LEARNINGS.md` would exceed their hard word limit (the old line-count budgets for those three were replaced by word limits on 2026-10-17).
 - Use `CATEGORY-YYYY-MM-DD-SHORT-SLUG.md` filenames (uppercase, hyphenated slug), preserve active summaries and archive pointers, and add the newest archive-index entry first.
 - If the intended archive filename already exists and is not the same content, append `-02`, `-03`, etc. before `.md`.

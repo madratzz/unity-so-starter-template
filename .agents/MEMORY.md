@@ -1,6 +1,7 @@
 # Active Memory
 
-Last updated: 2026-09-16
+Last updated: 2026-10-17
+Word limit: 2,000 visible words (including this line)
 
 ## Stable Project Facts
 
@@ -10,7 +11,7 @@ Last updated: 2026-09-16
 - License for all `com.madratzz.*` packages is MIT (Copyright (c) 2026 Raza Butt); each package carries `LICENSE.md` and `"license": "MIT"` in `package.json`.
 - The repository is a Unity project for personal reusable game-development packages.
 - Package distribution is intended to use a Verdaccio server.
-- The project uses Unity `6000.3.21f1` (Unity 6.3) and includes the Unity Test Framework and URP.
+- The project uses Unity `6000.3.24f1` (Unity 6.3; authoritative: `ProjectSettings/ProjectVersion.txt`) and includes the Unity Test Framework and URP.
 - `AGENTS.md` is the root repository guide for AI agents and automation harnesses; `.agents/` provides the active project context it directs them to read.
 - `IDEA.md` records the high-level reusable-package intent and Verdaccio distribution direction.
 
@@ -22,6 +23,8 @@ Last updated: 2026-09-16
 - Preserve concise active summaries after archival so agents do not need to read every historical file.
 - Never record secrets, API keys, passwords, tokens, private keys, credentials, or other sensitive values.
 - Provide one concise root guide that works for AI agents and automation harnesses, then place evolving project-specific knowledge in `.agents/`.
+- Rules and tooling guidance must be harness-agnostic (usable from Claude Code, Codex, Cursor, Hermes, or any other agent): no harness-specific paths or tool names in shared rules. User decision, 2026-10-17.
+- This repo does not adopt the personal rules library's DI/layered-architecture files (VContainer, MessagePipe, `Game.*` asmdefs, `IConfigService`); its other Unity rules are adopted (`AGENTS.md` "Unity Rules", full text in `.agents/rules/`). User decision, 2026-10-17.
 
 ## Naming Conventions
 
@@ -40,6 +43,7 @@ Last updated: 2026-09-16
 - `Packages/manifest.json` — Unity package dependencies.
 - `ProjectSettings/ProjectVersion.txt` — authoritative Unity editor-version record.
 - Verdaccio — intended package registry host.
+- `madratzz/madratzz-ai-prompts` — private GitHub repo mirroring the maintainer's personal AI rules library (canonical copy lives in their Obsidian vault); source of `.agents/rules/`.
 
 ## Do Not Forget
 

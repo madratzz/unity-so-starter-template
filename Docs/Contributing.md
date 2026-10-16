@@ -31,7 +31,8 @@ This repo also maintains `.agents/` (active project context: `CONTEXT.md`, `MEMO
 
 - Prefer SOAP wiring (ScriptableObject references) for shared state; VContainer is acceptable for genuine services, not a default requirement. See [[Architecture Overview]].
 - Add EditMode tests for deterministic logic; Play Mode tests only where engine/scene integration requires them.
-- `[SerializeField]` casing is not yet settled project-wide — match the surrounding file/package rather than assuming a convention (see [[Architecture Overview]]#Open architectural questions).
+- `[SerializeField] private` fields use PascalCase project-wide (settled 2026-09-20); other private fields are `_camelCase`. See `AGENTS.md`.
+- Unity-specific working rules — C# naming, ScriptableObject-backed tunables, designer-editable uGUI prefabs, headless Editor runs (`-batchmode -nographics -quit -projectPath … -accept-apiupdate -logFile …`), cheap-model test delegation, and making the official Unity skills available to your AI harness — are condensed in `AGENTS.md` under "Unity Rules"; full text is in `.agents/rules/`.
 
 ## Sensitive data
 

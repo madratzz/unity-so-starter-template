@@ -8,7 +8,7 @@ Full-text reference copies of the Unity rule files this repository follows. The 
 
 ## Provenance
 
-Copied on 2026-10-17 from the private `madratzz/madratzz-ai-prompts` library (`AI Prompts/Unity/`), after its skills-install, test-delegation and test-model-selection rules were made harness-agnostic (branch `fix/harness-agnostic-rules` of that repo at copy time). The library stays canonical; re-sync from it rather than editing these copies for content changes. The skills-install and editor-flag files include the 2026-10-17 corrections (verified agent ids; no `-quit` with `-runTests`). Local edits are limited to: uppercase filenames (this repo's context-file convention), cross-reference names, and the level-map image embed (the image is not vendored).
+Synced on 2026-10-17 from the private `madratzz/madratzz-ai-prompts` library (`AI Prompts/Unity/`, `main` at `fad35b6`), which by then had harness-agnostic skills/test rules, code-subscribed UI events, and no `-quit` with `-runTests`. The library stays canonical; re-sync from it rather than editing these copies for content changes. Local edits are limited to: uppercase filenames (this repo's context-file convention), cross-reference names, and the level-map image embed (the image is not vendored).
 
 ## Files
 
@@ -17,9 +17,9 @@ Copied on 2026-10-17 from the private `madratzz/madratzz-ai-prompts` library (`A
 | [UNITY-NAMING-CONVENTIONS.md](UNITY-NAMING-CONVENTIONS.md) | C# naming | `UniTask`/`IDomainEvent` examples do not apply — this repo uses neither. |
 | [UNITY-EDITOR-AUTOMATED-FLAG.md](UNITY-EDITOR-AUTOMATED-FLAG.md) | Non-interactive Editor launches | Applies as written. |
 | [UNITY-HEADLESS-ON-WORKTREE.md](UNITY-HEADLESS-ON-WORKTREE.md) | Headless-by-default in a worktree | Applies as written. |
-| [UNITY-TEST-DELEGATION.md](UNITY-TEST-DELEGATION.md) | Running tests in a cheap-model subagent | Use your harness's own subagent mechanism. |
+| [UNITY-TEST-DELEGATION.md](UNITY-TEST-DELEGATION.md) | Running tests in a cheap-model subagent | Use this repo's documented test command (AGENTS.md) rather than the batch-mode default. |
 | [UNITY-TEST-MODEL-SELECTION.md](UNITY-TEST-MODEL-SELECTION.md) | Choosing that cheap model | Resolve the model at run time; pin nothing. |
-| [UNITY-UGUI-PREFAB-AUTHORING.md](UNITY-UGUI-PREFAB-AUTHORING.md) | Designer-editable uGUI prefabs | `Assets/Game/Views/` does not exist; UI prefabs live under `Assets/Prefabs/` (see AGENTS.md). |
+| [UNITY-UGUI-PREFAB-AUTHORING.md](UNITY-UGUI-PREFAB-AUTHORING.md) | Designer-editable uGUI prefabs | `Assets/Game/Views/` does not exist; UI prefabs live under `Assets/Prefabs/` (see AGENTS.md). Events are wired in code, not the Inspector. |
 | [UNITY-LEVEL-MAP-DESIGN.md](UNITY-LEVEL-MAP-DESIGN.md) | Level docs and maps | Only relevant once a game built on this template has levels; paths adapted to `Docs/` (see AGENTS.md). |
 | [UNITY-OFFICIAL-SKILLS-INSTALL.md](UNITY-OFFICIAL-SKILLS-INSTALL.md) | Making Unity-Technologies skills available to the running harness | Harness-agnostic. |
 

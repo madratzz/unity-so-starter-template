@@ -2,7 +2,7 @@
 note_type: reference
 status: active
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-17
 tags:
   - ai-prompt
   - unity
@@ -30,7 +30,7 @@ A tier that was "the most recent" at the last rule update is rarely still the mo
 
 ## The Three Default Tiers
 
-When the choice is open, pick from these three cheap tiers. They are the defaults — the choice between them is the provider choice, not a capability choice. All three can parse Unity logs, summarise test output, and run small structured tasks at high reliability.
+The provider is the one the running harness is already using (Claude Code → Anthropic; Codex → OpenAI; Hermes → whichever it is configured for), unless the user says otherwise. When the choice is open, pick from these three cheap tiers. They are the defaults — the choice between them is the provider choice, not a capability choice. All three can parse Unity logs, summarise test output, and run small structured tasks at high reliability.
 
 - **Anthropic** → `haiku` (the cheapest Claude line; resolves to the current `claude-haiku-*` revision).
 - **OpenAI / GPT** → `luna` (the cheapest GPT-class line; resolves to the current `gpt-*-luna` revision).

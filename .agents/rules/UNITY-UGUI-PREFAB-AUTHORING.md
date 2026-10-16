@@ -2,7 +2,7 @@
 note_type: reference
 status: active
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-17
 tags:
   - ai-prompt
   - unity
@@ -31,7 +31,7 @@ A prefab is editor-ready when, opened in Prefab Mode with no scripts executing, 
 - All `RectTransform` anchors, pivots, and offsets are serialized on the asset.
 - All `LayoutGroup` and `ContentSizeFitter` components are on the asset, with their child-control and expand flags already set.
 - Every `Image`, `RawImage`, and `TextMeshProUGUI` references its sprite, texture, and font asset by direct asset reference — not by string path, not by `Resources.Load`, not by `Addressables.LoadAssetAsync` resolved at edit time.
-- Every `Button` has its `OnClick` wired as a serialized `UnityEvent` in the inspector, pointing at a host MonoBehaviour already on the prefab or a known scene reference. No wiring in `Awake` or `Start`.
+- Every interactive control (`Button`, `Toggle`, `Slider`, …) is present on the asset with its `Selectable` settings serialized, and the view script holds a serialized reference to it (or resolves it by name through a lookup that throws when the name is missing). Its **events are not wired in the inspector**: no `UnityEvent` entries on the asset. The view subscribes in code (see "Events Are Wired in Code").
 - Every serialized field the prefab depends on has a sensible default — opening the prefab cold, the designer sees a usable UI, not a stack of empty boxes.
 
 ## Build It In the Editor, Not In the Code
@@ -40,6 +40,16 @@ A prefab is editor-ready when, opened in Prefab Mode with no scripts executing, 
 - `AddComponent<T>`, `SetActive(true/false)`, anchor arithmetic, and `LayoutRebuilder.ForceRebuildLayoutImmediate` are for runtime mutation of an instantiated copy, never for the first-time build of the prefab.
 - A new UI element means a new `.prefab` file under `Assets/Game/Views/<Area>/`, committed alongside the code that drives it.
 - Themed variants, responsive variants, and platform variants are **prefab variants**, not runtime if/else trees. Designers can author them without touching code.
+
+## Events Are Wired in Code
+
+**Interaction events are subscribed in code, never as inspector `UnityEvent` entries.** An inspector wire is invisible to search, rename-refactors, and code review; a deleted or renamed method leaves a silent dead wire. A code subscription is greppable, typed, and breaks the build when the target changes.
+
+- The view controller subscribes with `AddListener` (or the control's equivalent) when it is shown or enabled, and unsubscribes with `RemoveListener` when it is hidden, disabled, or destroyed. Subscribe and unsubscribe are symmetric; every `AddListener` has a matching `RemoveListener`.
+- Subscribe to **named handler methods**, not lambdas, so the handler can be unsubscribed and shows up in stack traces.
+- The handler's job is to publish a domain event or call a service through the view's contract; the view does not make game decisions itself.
+- Wiring *listeners* in code is not "building UI in code". The prohibition below is about creating or laying out the hierarchy, which stays on the asset.
+- A handler that has to await is a plain `void` method that starts a `UniTask`-returning method and calls `.Forget()` on it (or returns `UniTaskVoid`), logging exceptions. `async void` is never used.
 
 ## Fields the Inspector Must See
 
@@ -58,7 +68,7 @@ A prefab is editor-ready when, opened in Prefab Mode with no scripts executing, 
 
 - **Do not** build UI in `Awake` / `Start` from primitive types. The designer cannot open the prefab and see it.
 - **Do not** use `Resources.Load("UI/...")` to find a prefab by path. Reference it from a `ScriptableObject` config or from a serialized field.
-- **Do not** wire `Button.OnClick` in code. Wire it in the inspector; the wire is part of the design.
+- **Do not** wire `Button.OnClick` (or any other `UnityEvent`) in the inspector. Subscribe in code and unsubscribe symmetrically; see "Events Are Wired in Code".
 - **Do not** call `transform.SetParent` from a designer-facing authoring script. The hierarchy is the design.
 - **Do not** strip the `Canvas` and `CanvasScaler` from a "child prefab". The prefab must be instantiate-ready; the consumer is responsible for putting it under a `Canvas`, not the prefab author for stripping it.
 - **Do not** save prefab state changes that come from `OnValidate` mutating values the designer just typed. The round-trip is "designer's keystrokes survive a reload".
@@ -68,7 +78,7 @@ A prefab is editor-ready when, opened in Prefab Mode with no scripts executing, 
 - [ ] Every new UI element is a `.prefab` file under `Assets/Game/Views/`.
 - [ ] Opening the prefab in Prefab Mode shows the same UI the player sees.
 - [ ] All sprite, font, texture, and nested-prefab references are direct asset references, not string paths.
-- [ ] All `Button.OnClick` and other `UnityEvent`s are wired in the inspector, not in code.
+- [ ] No `UnityEvent` entries are wired in the inspector; every `onClick` and similar event is subscribed in code and unsubscribed symmetrically.
 - [ ] Every configurable value is `[SerializeField] private` and visible by default.
 - [ ] No `[ExecuteAlways]` that mutates serialized state in edit mode.
 - [ ] No `Resources.Load` of UI prefabs.

@@ -4,6 +4,28 @@ Last updated: 2026-10-17
 
 ## Current Session
 
+### 2026-10-17T01:09:05+05:00 — claude-sonnet-5.5/merge-sweep-into-development
+
+Merge sweep requested by the user. Merged PR [madratzz/unity-so-starter-template#19](https://github.com/madratzz/unity-so-starter-template/pull/19) (screen-flow states, views, HUD/settings variable bindings, `DBInt`/`DBBool` `DefaultValue` fix) into `development` with a merge commit (`60bbe26`, parents `8549afd/6732661`). Earlier in the day #21 and #22 (Unity rules adoption and re-sync) were merged the same way. No CI checks are configured on the repo (0 reported).
+
+Files touched:
+
+- `.agents/LOGS.md`, `.agents/CONTEXT.md`, `.agents/INDEX.md`, `.archive/context/` — conflict resolution on the #19 branch: kept `development`'s trimmed `LOGS.md`/`INDEX.md` and re-inserted the branch's six session entries; archived the `Packages/` catalog bullet and the answered GameEvents question (`CONTEXT-2026-09-25-…`) so `CONTEXT.md` stays at 1,146/1,200 words.
+
+Decisions made:
+
+- Resolved the #19 conflicts on its branch rather than forcing them (they were only append-only log and context files).
+- PR #20 (`development` → `main` release) was not touched; a release is the user's call.
+
+Issues found:
+
+- Post-merge EditMode run not performed: a Unity Editor holds the project, so batch mode cannot open it, and the sweep did not disturb it. #19's own log entries record an EditMode run before merge.
+
+Next steps:
+
+- Run `unity command run_tests --mode EditMode` against `development` when convenient.
+- Decide when to release `development` to `main` (PR #20).
+
 ### 2026-10-17T01:02:12+05:00 — claude-sonnet-5.5/sync-unity-rules-with-library
 
 Follow-up after PR #21 merged: `madratzz-ai-prompts` `main` moved (a50c3e6, same day) with a fuller harness-agnostic rewrite plus two behaviour changes, so the vendored copies and `AGENTS.md` bullets were stale.

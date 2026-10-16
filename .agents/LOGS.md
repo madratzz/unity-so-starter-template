@@ -4,6 +4,12 @@ Last updated: 2026-10-17
 
 ## Current Session
 
+### 2026-10-17T01:13:21+05:00 — claude-sonnet-5.5/android-scripting-defines
+
+Committed a pending Editor-generated change to `ProjectSettings/ProjectSettings.asset` at the user's request: the Android scripting-define symbols now mirror Standalone (`SENTIS_ANALYTICS_ENABLED;APP_UI_EDITOR_ONLY`). The change was already in the working tree before this session's other work; its origin (Unity adding the Android entry on its own) is an assumption, not confirmed.
+
+Documentation review: no project documentation describes scripting defines, so only this log entry was needed.
+
 ### 2026-10-17T01:09:05+05:00 — claude-sonnet-5.5/merge-sweep-into-development
 
 Merge sweep requested by the user. Merged PR [madratzz/unity-so-starter-template#19](https://github.com/madratzz/unity-so-starter-template/pull/19) (screen-flow states, views, HUD/settings variable bindings, `DBInt`/`DBBool` `DefaultValue` fix) into `development` with a merge commit (`60bbe26`, parents `8549afd/6732661`). Earlier in the day #21 and #22 (Unity rules adoption and re-sync) were merged the same way. No CI checks are configured on the repo (0 reported).

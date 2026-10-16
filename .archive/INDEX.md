@@ -2,7 +2,7 @@
 
 Schema version: 1
 
-Last updated: 2026-08-15
+Last updated: 2026-10-17
 
 ## Archive Categories
 

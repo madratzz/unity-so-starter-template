@@ -2,9 +2,8 @@
 
 Schema version: 1
 
-Last updated: 2026-08-15
+Last updated: 2026-10-17
 
 | Date | File | Summary |
 |---|---|---|
-
-No archived context snapshots yet. Add new entries directly below the table header in recent-to-oldest order.
+| 2026-09-21 | [CONTEXT-2026-09-21-SEARCHABLE-ASSET-DROPDOWN-DECISION.md](CONTEXT-2026-09-21-SEARCHABLE-ASSET-DROPDOWN-DECISION.md) | Full 2026-09-21 decision note on the global searchable `ScriptableObject` dropdown (first cut per-field attribute, replaced by a type-based drawer) |

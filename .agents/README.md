@@ -13,6 +13,7 @@ Start with the root [AGENTS.md](../AGENTS.md), then use this folder for active p
 ## Purpose
 
 - Store active project context.
+- Keep `CONTEXT.md`, `MEMORY.md`, and `LEARNINGS.md` within their word budgets (1,200 / 2,000 / 1,500); use indexed archives for supporting detail.
 - Store recent logs.
 - Store stable memory.
 - Store recent learnings.
@@ -27,6 +28,7 @@ Start with the root [AGENTS.md](../AGENTS.md), then use this folder for active p
 - `LOGS.md` — recent work logs.
 - `INDEX.md` — table of contents for active context files.
 - `agents/DEFAULT-AGENT.md` — default agent operating file.
+- `rules/` — full-text reference copies of the Unity rules condensed in the root `AGENTS.md` (see [`rules/README.md`](rules/README.md)).
 
 ## Archive
 

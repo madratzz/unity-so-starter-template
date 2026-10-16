@@ -2,7 +2,7 @@
 note_type: reference
 status: active
 created: 2026-10-15
-updated: 2026-10-15
+updated: 2026-10-17
 tags:
   - ai-prompt
   - unity
@@ -57,13 +57,13 @@ A focused, copy-pasteable rule set for C# in Unity 6 projects. Apply this file's
 - Methods returning `UniTask` are not suffixed `Async` when the method name already says so (`Load`, `Save`, `Transition`). They are suffixed `Async` when the same name has a synchronous variant, or when the verb alone would not communicate that the call yields (`EnsureVisibleAsync`).
 - Methods returning `ValueTask` only when the hot path matters and a `UniTask` allocation is unacceptable. Otherwise use `UniTask`.
 - Cancellation token is the **last** parameter, with the default value `default`. Never the first parameter; never required.
-- `async void` is **never** used outside `UnityEvent` adapters. Everything else returns `UniTask` or `UniTaskVoid` (the latter only for fire-and-forget event handlers that explicitly swallow exceptions).
+- `async void` is **never** used. UI events are subscribed in code, so a handler is a plain `void` method that starts a `UniTask`-returning method and calls `.Forget()`; a fire-and-forget method may return `UniTaskVoid` and must log the exceptions it swallows. Everything else returns `UniTask`.
 
 ## Events and Delegates
 
 - `IDomainEvent` records are `PascalCase` past-tense: `LevelCompleted`, `PurchaseGranted`, `AdImpressionLogged`. Past-tense reads as "this is the announcement", which is what events are.
 - Public delegate types that are not events end in `Handler` or `Callback`. Events themselves are not delegate types; they are fields or properties of type `Action<...>` or `Func<...>` and live on the service that raises them.
-- Do not name a method `On*` unless it overrides a base `On*` method or is wired to a `UnityEvent`. The `On` prefix is a Unity convention for callback methods and reading "OnX" implies it is one.
+- Do not name a method `On*` unless it overrides a base `On*` method or is a Unity message (`OnEnable`, `OnDestroy`, `OnValidate`, …). The `On` prefix is a Unity convention for engine callbacks and reading "OnX" implies it is one. A handler you subscribe in code (`button.onClick.AddListener(...)`) is named for what it does: `HandleAccept`, `HandleDismiss`.
 
 ## Inspector-facing
 

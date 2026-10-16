@@ -4,6 +4,28 @@ Last updated: 2026-10-17
 
 ## Current Session
 
+### 2026-10-17T01:02:12+05:00 — claude-sonnet-5.5/sync-unity-rules-with-library
+
+Follow-up after PR #21 merged: `madratzz-ai-prompts` `main` moved (a50c3e6, same day) with a fuller harness-agnostic rewrite plus two behaviour changes, so the vendored copies and `AGENTS.md` bullets were stale.
+
+Files touched:
+
+- `.agents/rules/` — re-synced six files from upstream `main` (`fad35b6`); `README.md` provenance updated.
+- `AGENTS.md` — skills bullet now uses the official-plugin route for Claude Code/Codex/Grok and the `skills` CLI elsewhere; UI events are subscribed in code (no Inspector `UnityEvent`s); `async void` is never used; documented this repo's test command (`unity command run_tests --mode EditMode` against the live Editor, since an open Editor holds `Temp/UnityLockfile`).
+- Source repo (merged): PR #2 adds `-quit`-with-`-runTests` correction; my earlier PR #1 was superseded and closed.
+
+Decisions made:
+
+- Upstream wins on content; this repo only adapts paths. The `-quit` correction was contributed upstream rather than kept as a local edit.
+
+Issues found:
+
+- Two sessions edited the prompts library concurrently; PR #21 had already merged the pre-sync text, hence this follow-up.
+
+Next steps:
+
+- None outstanding for the rules adoption.
+
 ### 2026-10-17T00:48:57+05:00 — claude-sonnet-5.5/apply-unity-rules-library
 
 Ran the `madratzz/madratzz-ai-prompts` library in this repo: its rules-applier prompt (merge Unity rules into `AGENTS.md`) and its agent-context bootstrap prompt (idempotent re-run). User decisions: apply every rule file; skip the DI/layered-architecture part for this SOAP repo; make the skills-install rule harness-agnostic so any harness can use it, fixed at the source repo; run the bootstrap prompt fully.

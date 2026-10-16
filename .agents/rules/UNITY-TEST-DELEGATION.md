@@ -2,7 +2,7 @@
 note_type: reference
 status: active
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-17
 tags:
   - ai-prompt
   - unity
@@ -14,7 +14,7 @@ tags:
 
 # Unity Test Delegation to a Cheaper Model
 
-Rules for delegating Unity test execution (PlayMode, EditMode, guard tests) to a separate subagent running on a lower-tier model. The main session handles implementation; a cheap-model subagent handles running tests, parsing results, and reporting pass/fail with the relevant logs.
+Rules for delegating Unity test execution (PlayMode, EditMode, guard tests) to a separate subagent running on a lower-tier model, in any agent harness that can spawn one (Claude Code, Codex, Cursor, Hermes, …). The main session handles implementation; a cheap-model subagent handles running tests, parsing results, and reporting pass/fail with the relevant logs.
 
 Apply this file's rules by either pasting them into the project's `AGENTS.md` or by handing this file to an AI agent and asking it to integrate the rules.
 
@@ -24,7 +24,7 @@ Apply this file's rules by either pasting them into the project's `AGENTS.md` or
 
 **At the start of any Unity task that will need tests run, decide which cheaper model will execute them, and spawn a separate subagent on that model to do the test runs.** Do not run the test suite inline from the main session if a cheap-model subagent is available.
 
-A test run is mostly mechanical — invoke the Unity CLI in batch mode, watch the log, summarize pass/fail. Cheap models do this faster and cheaper than the main session, and the main session stays focused on the code under test.
+A test run is mostly mechanical — invoke the project's test command, watch the log, summarize pass/fail. Cheap models do this faster and cheaper than the main session, and the main session stays focused on the code under test.
 
 ## When to Decide
 
@@ -44,15 +44,24 @@ Pick the cheap model by provider. See `UNITY-TEST-MODEL-SELECTION.md` for the ca
 
 ## Spawning the Test Agent
 
+How a subagent is spawned depends on the harness. Use the harness's own mechanism and set the model explicitly:
+
+| Harness | Mechanism |
+|---|---|
+| Claude Code | The `Agent` tool with its `model` parameter set to the cheap tier (`haiku`). |
+| Hermes | `delegate_task` with the chosen model. |
+| Codex, Cursor, others | The harness's subagent or background-task facility, with the model set to the cheap tier. |
+| No subagent facility | Run inline; this rule does not apply. |
+
 Hand the subagent only what it needs:
 
-- **The exact Unity command line**, including the automated flags from `UNITY-EDITOR-AUTOMATED-FLAG.md` (`-batchmode -nographics -quit -projectPath <abs> -accept-apiupdate -logFile <path>` plus `-runTests` and the test assembly filter for EditMode/PlayMode).
+- **The exact Unity command line.** Use the test command the project documents in its `AGENTS.md` — a project may run tests in an already-open Editor through a command pipeline because batch mode cannot open a project an Editor holds. When the project documents none, use batch mode with the automated flags from `UNITY-EDITOR-AUTOMATED-FLAG.md` (`-batchmode -nographics -quit -projectPath <abs> -accept-apiupdate -logFile <path>` plus `-runTests` and the test assembly filter for EditMode/PlayMode).
 - **The expected log file path**, so it can read results without `tee`-ing live output.
 - **The success criteria** as a bullet list: exit code `0`, no `Failed` line in the log, all required test names present in the result XML.
 - **The report format**: e.g. `PASS / FAIL + failing test names + first 20 lines of any failure block + total elapsed seconds`.
 - **What to NOT do**: do not ask the subagent to fix failures, redesign the test, or interpret the code under test. The subagent runs and reports. Diagnosis stays in the main session.
 
-Use your harness's subagent mechanism with the chosen model and a short, focused context (for example Claude Code's `Agent` tool with its `model` option, or Hermes `delegate_task`; any harness that can spawn a model-selectable subagent works). Do not pass the main session's full reasoning history — the subagent does not need it.
+Give the subagent a short, focused brief. Do not pass the main session's full reasoning history — the subagent does not need it.
 
 ## Parallel Where Possible
 
@@ -80,7 +89,7 @@ Treat an unverifiable report as a failed run, not a passed one.
 ## Don'ts
 
 - **Do not** give the test agent the task of "fix the failing tests". That is the main session's job. The runner only runs and reports.
-- **Do not** assume a model is available without verifying. If the subagent spawn returns "model not found", ask the user which fallback to use instead of silently switching.
+- **Do not** assume a model is available without verifying. If the spawn is rejected with "model not found" (or the equivalent), ask the user which fallback to use instead of silently switching.
 - **Do not** pass the main session's full context to the runner. The runner gets the command, the criteria, and the report format — nothing else.
 - **Do not** spawn the runner in the same worktree as the main session if the main session is mid-edit. The runner reads a snapshot, not a half-written file. Run after the change is committed or at least stashed.
 - **Do not** trust a runner report that has no exit code, no log path, and no test-name list. The report is incomplete; treat as failure.
@@ -90,7 +99,7 @@ Treat an unverifiable report as a failed run, not a passed one.
 
 - [ ] The test list for the task was enumerated (existing tests that must still pass, new tests the task adds).
 - [ ] The runner model was picked from the mapping, or the user was asked.
-- [ ] The command line uses the automated flags from `UNITY-EDITOR-AUTOMATED-FLAG.md`.
+- [ ] The command is the project's documented test command, or batch mode with the automated flags from `UNITY-EDITOR-AUTOMATED-FLAG.md` when none is documented.
 - [ ] The subagent was given: command, log path, success criteria, report format, and an explicit "do not fix" boundary.
 - [ ] The main session knows how it will verify the report (exit code + grep on log + test-name list).
 - [ ] The user was asked if the suite size or the provider choice was unclear.
